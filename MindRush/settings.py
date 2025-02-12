@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'api' #creada manualmente
 ]
 
+AUTH_USER_MODEL = 'api.CustomUser'
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Añadir al inicio
     'django.middleware.security.SecurityMiddleware',
@@ -83,8 +86,12 @@ WSGI_APPLICATION = 'MindRush.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Mindrushdb',
+        'USER': 'postgres',
+        'PASSWORD': 'Basedatos270810',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -131,3 +138,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuración de CORS
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}

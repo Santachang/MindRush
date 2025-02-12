@@ -1,19 +1,16 @@
+# api/serializers.py
+
 from rest_framework import serializers
-from .models import Categoria, Pregunta, Respuesta
+from .models import CustomUser
 
-class RespuestaSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Respuesta
-        fields = ['id', 'texto', 'es_correcta']
+        model = CustomUser
+        fields = ('username', 'email', 'password', 'first_name', 'last_name')
+        extra_kwargs = {'password': {'write_only': True}}
 
-class PreguntaSerializer(serializers.ModelSerializer):
-    respuestas = RespuestaSerializer(many=True, read_only=True)
-    
-    class Meta:
-        model = Pregunta
-        fields = ['id', 'texto', 'dificultad', 'puntos', 'respuestas']
-
-class CategoriaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Categoria
-        fields = ['id', 'nombre', 'descripcion']
+    def create(self, validated_data):
+        user = CustomUser(**validated_data)
+        user.set_password(validated_data['password'])  # Asegúrate de que la contraseña esté encriptada
+        user.save()
+        return user
